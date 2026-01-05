@@ -44,4 +44,13 @@ resource "docker_container" "web1" {
   networks_advanced {
     name = docker_network.private_network.name
   }
+  
+ports {
+    internal = 9100
+    external = 9100
+  }
+
+  networks_advanced {
+    name = docker_network.private_network.name
+  }
 }
