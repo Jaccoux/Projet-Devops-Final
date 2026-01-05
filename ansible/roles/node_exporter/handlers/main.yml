@@ -1,0 +1,8 @@
+# ansible/roles/node_exporter/handlers/main.yml
+
+---
+- name: Restart node_exporter
+  systemd:
+    name: node_exporter
+    state: restarted
+    daemon_reload: yes

@@ -1,0 +1,15 @@
+---
+- name: "Installation de Nginx"
+  apt:
+    name: nginx
+    state: present
+
+- name: "Demarrage manuel de Nginx (Docker workaround)"
+  shell: "service nginx start"
+  # On ajoute cette ligne pour éviter qu'Ansible ne relance la commande 
+  # si Nginx tourne déjà, mais pour un labo, c'est optionnel.
+
+- name: "Creation d'une page index de test"
+  copy:
+    content: "<h1>Serveur de Sjacc : Tout fonctionne !</h1>"
+    dest: /var/www/html/index.html

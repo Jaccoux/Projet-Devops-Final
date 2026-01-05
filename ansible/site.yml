@@ -1,0 +1,17 @@
+---
+- name: "Configuration complète de la VM web1"
+  hosts: web
+  become: true
+
+  # On peut garder quelques tâches de base ici
+  pre_tasks:
+    - name: "Mise à jour du cache APT (Indispensable sur Ubuntu)"
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+  # On appelle ensuite les rôles (les dossiers dans ansible/roles/)
+  roles:
+    - docker
+    - nginx
+    - node_exporter

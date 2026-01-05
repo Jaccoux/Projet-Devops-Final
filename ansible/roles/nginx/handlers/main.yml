@@ -1,0 +1,5 @@
+# ansible/roles/nginx/handlers/main.yml
+
+---
+# TODO E3: Créer le handler pour redémarrer nginx
+

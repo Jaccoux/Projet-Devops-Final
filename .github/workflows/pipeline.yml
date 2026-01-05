@@ -1,0 +1,35 @@
+name: DevOps Mini Project Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: # Permet de lancer le pipeline manuellement sur GitHub
+
+jobs:
+  devops-pipeline: # Un seul job pour ne pas perdre les conteneurs Docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      # --- SECTION TERRAFORM ---
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init & Apply
+        working-directory: ./infra
+        run: |
+          terraform init
+          terraform apply -auto-approve
+
+      # --- SECTION ANSIBLE ---
+      - name: Run Ansible Playbook
+        working-directory: ./ansible
+        run: |
+          # On installe Ansible sur le runner GitHub
+          sudo apt-get update && sudo apt-get install -y ansible
+          
+          # ASTUCE : On utilise le connecteur "docker" pour éviter les problèmes de clés SSH
+          # Cela permet à Ansible de parler directement aux conteneurs créés par Terraform
+          ansible-playbook -i inventory.ini site.yml -c docker --extra-vars "ansible_user=root"
